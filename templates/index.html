@@ -1,0 +1,39 @@
+<!-- templates/youtube_downloader.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube Downloader</title>
+</head>
+<body>
+    <h1>YouTube Video Downloader</h1>
+
+    <!-- Check if video details are available (after form submission) -->
+    {% if video %}
+        <h3>{{ video.title }}</h3>
+        <img src="{{ video.thumbnail_url }}" alt="Video Thumbnail" width="300px">
+        
+        <!-- Download confirmation button -->
+        <form method="POST" action="{% url 'download_video' %}">
+            {% csrf_token %}
+            <input type="hidden" name="youtube_url" value="{{ video.url }}">
+            <input type="radio" name="media_type" value="audio">Audio
+            <input type="radio" name="media_type" value="video">Video
+            <button type="submit">Download Video</button>
+        </form>
+    {% else %}
+        <!-- Form for the user to input a YouTube URL -->
+        <form method="POST" action="{% url 'process_link' %}">
+            {% csrf_token %}
+            <label for="youtube_url">Enter YouTube URL:</label>
+            <input type="text" id="youtube_url" name="youtube_url" placeholder="Paste YouTube URL here" required>
+            <button type="submit">Proceed</button>
+        </form>
+    {% endif %}
+
+    {% if error %}
+        <p style="color: red;">{{ error }}</p>
+    {% endif %}
+</body>
+</html>
