@@ -30,7 +30,8 @@ def process_link(request):
         youtube_url = request.POST.get('youtube_url')
         print(f"Received YouTube URL: {youtube_url}")
         try:
-            yt = YouTube(youtube_url)
+            # yt = YouTube(youtube_url)
+            yt = YouTube(youtube_url, use_po_token=True)
             video = {
                 'title': yt.title,
                 'thumbnail_url': yt.thumbnail_url,
