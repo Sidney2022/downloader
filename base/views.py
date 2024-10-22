@@ -1,29 +1,46 @@
 # views.py
 from django.shortcuts import render, redirect
-from pytube import YouTube
+from pytubefix import YouTube
 from django.http import HttpResponse
 import os
 import yt_dlp
 
-
 # Handle the form submission and display the video thumbnail
+# def process_link(request):
+#     if request.method == 'POST':
+#         youtube_url = request.POST.get('youtube_url')
+#         try:
+#             # Initialize YouTube object to get video details
+#             yt = YouTube(youtube_url)
+#             video = {
+#                 'title': yt.title,
+#                 'thumbnail_url': yt.thumbnail_url,
+#                 'url': youtube_url  # Pass the URL again for the download step
+#             }
+#             return render(request, 'index.html', {'video': video})
+#         except Exception as e:
+#             # Handle the case where the URL is invalid or other errors occur
+#             return render(request, 'index.html', {'error': 'Invalid YouTube URL or error fetching video.'})
+#     # If not a POST request, render the form page
+#     return render(request, 'index.html')
+
+
 def process_link(request):
     if request.method == 'POST':
         youtube_url = request.POST.get('youtube_url')
+        print(f"Received YouTube URL: {youtube_url}")
         try:
-            # Initialize YouTube object to get video details
             yt = YouTube(youtube_url)
             video = {
                 'title': yt.title,
                 'thumbnail_url': yt.thumbnail_url,
-                'url': youtube_url  # Pass the URL again for the download step
+                'url': youtube_url,
             }
             return render(request, 'index.html', {'video': video})
         except Exception as e:
-            # Handle the case where the URL is invalid or other errors occur
+            print(e)
             return render(request, 'index.html', {'error': 'Invalid YouTube URL or error fetching video.'})
 
-    # If not a POST request, render the form page
     return render(request, 'index.html')
 
 # Handle the download after confirmation
@@ -53,7 +70,6 @@ def process_link(request):
 
 
 from django.http import HttpResponse
-from pytubefix import YouTube
 import os
 
 def download_video(request):
